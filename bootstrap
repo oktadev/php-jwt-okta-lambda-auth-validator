@@ -17,11 +17,10 @@ do {
 	$request = getNextRequest();
 
 	// Obtain the function name from the _HANDLER environment variable and ensure the function's code is available.
-	$handlerFunction = array_slice(explode('.', $_ENV['_HANDLER']), -1)[0];
-	require_once $_ENV['LAMBDA_TASK_ROOT'] . '/src/' . $handlerFunction . '.php';
+	require_once $_ENV['LAMBDA_TASK_ROOT'] . '/src/authorizer.php';
 
 	// Execute the desired function and obtain the response.
-	$response = $handlerFunction($request['payload']);
+	$response = authorizer($request['payload']);
 
 	// Submit the response back to the runtime API.
 	sendResponse($request['invocationId'], $response);
