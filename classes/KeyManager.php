@@ -32,6 +32,7 @@ class KeyManager {
 
 	public function updateKeys() {
 
+		// Build the URL from Okta that we'll use to retrieve the current set of signing keys
 		$server = Config::OKTA_SERVER_HOSTNAME;
 		$url = 'https://' . $server . '/oauth2/default/v1/keys?client_id=' . Config::OKTA_APP_CLIENT_ID;
 
@@ -80,6 +81,7 @@ class KeyManager {
 		}
 
 		if ( count( $pem_keys ) ) {
+			// Save both the keys and their expiring moment for future use
 			$this->keys = $pem_keys;
 			$this->valid_until = strtotime( $headers['expires'][0] );
 		}
