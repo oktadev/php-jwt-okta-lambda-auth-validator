@@ -34,24 +34,36 @@ function authorizer($data) {
 	}
 
 	if ( ! $jwt_valid || ! $decoded_token) {
-		return json_encode( [
-			'errorMessage' => $error,
-		] );
-	}
+		$result = [
+			'principalId' => 'unknown',
+			'policyDocument' => [
+				'Version' => '2012-10-17',
+				'Statement' => [
+					[
+						'Action' => 'execute-api:Invoke',
+						'Effect' => 'Deny',
+						'Resource' => $method,
+					]
+				],
+			]
+		];
 
-	$result = [
-		'principalId' => $decoded_token->sub,
-		'policyDocument' => [
-			'Version' => '2012-10-17',
-			'Statement' => [
-				[
-					'Action' => 'execute-api:Invoke',
-					'Effect' => 'Allow',
-					'Resource' => $method,
-				]
-			],
-		]
-	];
+	} else {
+
+		$result = [
+			'principalId'    => $decoded_token->sub,
+			'policyDocument' => [
+				'Version'   => '2012-10-17',
+				'Statement' => [
+					[
+						'Action'   => 'execute-api:Invoke',
+						'Effect'   => 'Allow',
+						'Resource' => $method,
+					]
+				],
+			]
+		];
+	}
 
 	return json_encode( $result );
 }
