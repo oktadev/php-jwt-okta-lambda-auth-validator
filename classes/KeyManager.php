@@ -36,7 +36,9 @@ class KeyManager {
 		$server = Config::OKTA_SERVER_HOSTNAME;
 		$url = 'https://' . $server . '/oauth2/default/v1/keys?client_id=' . Config::OKTA_APP_CLIENT_ID;
 
-		$client = new \GuzzleHttp\Client();
+		$handler = new GuzzleHttp\Handler\StreamHandler;
+		$client = new GuzzleHttp\Client(['handler' => $handler]);
+
 		$query_response = $client->get( $url );
 
 		$response = json_decode( (string) $query_response->getBody() );
