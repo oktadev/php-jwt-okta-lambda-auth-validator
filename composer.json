@@ -1,6 +1,17 @@
 {
+    "autoload": {
+        "psr-4": {"OktaLambdaAuth\\": "src/classes/"}
+    },
     "require": {
-	"aws/aws-sdk-php" : "2.*",
-        "guzzlehttp/guzzle": "^6.5"
+        "aws/aws-sdk-php" : "3.*",
+        "guzzlehttp/guzzle": "^6.5",
+        "firebase/php-jwt": "^5.2",
+        "codercat/jwk-to-pem": "^0.0.3",
+        "ext-curl": "*",
+        "ext-json": "*"
+    }
+    ,
+    "require-dev": {
+        "roave/security-advisories": "dev-master"
     }
 }
