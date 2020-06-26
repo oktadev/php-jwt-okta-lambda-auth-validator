@@ -1,6 +1,6 @@
 {
     "autoload": {
-        "psr-4": {"OktaLambdaAuth\\": "src/classes/"}
+        "psr-4": {"OktaLambdaAuth\\": "classes/"}
     },
     "require": {
         "aws/aws-sdk-php" : "3.*",
