@@ -36,34 +36,10 @@ class KeyManager {
 		$server = Config::OKTA_SERVER_HOSTNAME;
 		$url = 'https://' . $server . '/oauth2/default/v1/keys?client_id=' . Config::OKTA_APP_CLIENT_ID;
 
-		$curl = curl_init();
+		$client = new \GuzzleHttp\Client();
+		$query_response = $client->get( $url );
 
-		$headers = [];
-
-		curl_setopt_array( $curl, array(
-			CURLOPT_URL            => $url,
-			CURLOPT_RETURNTRANSFER => true,
-			CURLOPT_ENCODING       => "",
-			CURLOPT_MAXREDIRS      => 10,
-			CURLOPT_TIMEOUT        => 120,
-			CURLOPT_FOLLOWLOCATION => true,
-			CURLOPT_HTTP_VERSION   => CURL_HTTP_VERSION_1_1,
-			CURLOPT_HEADERFUNCTION => static function( $c, $header ) use ( &$headers ) {
-				$len = strlen($header);
-				$header = explode(':', $header, 2);
-				if (count($header) < 2) // ignore invalid headers
-					return $len;
-
-				$headers[strtolower( trim( $header[0] ) )][] = trim( $header[1] );
-
-				return $len;
-			}
-		) );
-
-		$response_json = curl_exec( $curl );
-		curl_close($curl);
-
-		$response = json_decode( $response_json );
+		$response = json_decode( (string) $query_response->getBody() );
 
 		if ( isset( $response->errorCode ) ) {
 			// Error
@@ -83,7 +59,7 @@ class KeyManager {
 		if ( count( $pem_keys ) ) {
 			// Save both the keys and their expiring moment for future use
 			$this->keys = $pem_keys;
-			$this->valid_until = strtotime( $headers['expires'][0] );
+			$this->valid_until = strtotime( $query_response->getHeader('expires')[0] );
 		}
 
 		return $this->keys;
