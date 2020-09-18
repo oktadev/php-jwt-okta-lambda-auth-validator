@@ -2,7 +2,12 @@
 <?php
 
 // This invokes Composer's autoloader so that we'll be able to use Guzzle and any other 3rd party libraries we need.
-require __DIR__ . '/vendor/autoload.php';
+// Depending on the configured runtime, its location may vary
+if ( file_exists(__DIR__ . '/vendor/autoload.php' ) ) {
+	require __DIR__ . '/vendor/autoload.php';
+} else {
+	require '/opt/vendor/autoload.php';
+}
 
 // Initialize signing-key manager, and retrieve the current JWT signing keys from Okta
 $keyManager = OktaLambdaAuth\KeyManager::instance();
