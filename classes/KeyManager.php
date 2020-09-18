@@ -34,7 +34,7 @@ class KeyManager {
 
 		// Build the URL from Okta that we'll use to retrieve the current set of signing keys
 		$server = Config::OKTA_SERVER_HOSTNAME;
-		$url = 'https://' . $server . '/oauth2/default/v1/keys?client_id=' . Config::OKTA_APP_CLIENT_ID;
+		$url = 'https://' . $server . '/oauth2/default/v1/keys';
 
 		$client = new \GuzzleHttp\Client();
 
